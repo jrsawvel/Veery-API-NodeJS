@@ -1,0 +1,12 @@
+{
+  "name" : "Veery-API-NodeJS",
+  "version" : "1.0.0",
+  "dependencies" : {
+    "express"            : "4.14.0",
+    "body-parser"        : "1.16.0",
+    "html-entities"      : "1.2.0",
+    "querystring"        : "0.2.0",
+    "dateformat"         : "1.0.11", 
+    "couchdbjs"          : "1.1.2" 
+  }
+}
