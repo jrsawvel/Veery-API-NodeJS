@@ -5,6 +5,7 @@ var express        = require('express'),
     posts          = require('./posts'),
     nopwdlink      = require('./loginlink');
     logout         = require('./logout');
+    user           = require('./usersettings');
 
 
 app = express();
@@ -27,6 +28,8 @@ app.get('/api/posts', posts.get_request_for_a_stream);
 app.post('/api/users/login', nopwdlink.loginlink);
 app.get('/api/users/login', nopwdlink.activatelogin);
 app.get('/api/users/logout', logout.logout);
+app.get('/api/users/:author', user.read);
+app.put('/api/users', user.update);
 
 app.use(errors.error);
 
