@@ -41,12 +41,15 @@ var UserSettings = {
     },
 
 
+// todo add valid email check  !Utils::is_valid_email($old_email) 
+
     'update': function (req, res) {
          var obj = req.body;
          auth.is_valid_login(obj.author, obj.session_id, function(logged_in_flag) {
              if ( !logged_in_flag ) {
                  report_error.error400(res, "Unable to peform action.", "You are not logged in.");
              } else {
+                 // needed ?? obj.old_email.trim()
                  get_author_info(obj.author, function(author_obj) {
                      if ( !author_obj ) {
                          report_error.error400(res, "Unable to complete action.", "Author not found.");
@@ -62,7 +65,20 @@ var UserSettings = {
                          report_error.error400(res, "Unable to peform action.", "Invalid user information provided. (B)");
                      } else  {
                          author_obj.email = obj.new_email;
-                         report_error.error400(res, obj.author, obj.session_id);
+                         update_author_info(author_obj, function(flag) {
+                             if ( flag ) {
+                                 var return_obj = {
+                                     status: 200,
+                                     description: 'OK',
+                                     logged_out: 'true'
+                                 }
+                                 var json_str = JSON.stringify(return_obj);  
+                                 res.status(200).send(json_str);
+                             } else {
+                                 report_error.error400(res, "Unable to logout.", "Invalid info submitted.");
+                             }
+                         });
+                         // report_error.error400(res, obj.author, obj.session_id);
                      }
                  }); 
              }
@@ -70,6 +86,24 @@ var UserSettings = {
     }
 
 };
+
+
+function update_author_info(author_obj, callback) {
+
+    var url = veery_config.couchdb_url + veery_config.database_name + '/' + author_obj._id;
+
+    request.put ({
+        url: url,
+        body: author_obj,  
+        json: true,
+    }, function(err, resp, body) {
+        if ( err ) {
+            callback(false);
+        } else {
+            callback(true);
+        }
+    });
+}
 
 
 function get_author_info(author_name, callback) {

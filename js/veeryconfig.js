@@ -15,6 +15,7 @@ VeeryConfig.prototype.getvalues = function() {
         mailgun_domain:    'maketoledo.com',
         mailgun_from:      'MakeToledo <postmaster@maketoledo.com>',
         site_name:         'Veery API NodeJS', 
+        max_entries_on_page: 15,
     };
 
     return config_values;
